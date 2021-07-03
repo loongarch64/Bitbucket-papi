@@ -354,6 +354,7 @@ All of the functions in the PerfAPI should use the following set of constants.
 #define PAPI_VENDOR_FREESCALE 6
 #define PAPI_VENDOR_ARM     7
 #define PAPI_VENDOR_MIPS    8
+#define PAPI_VENDOR_LOONGARCH64    9
 /** @} */
 
 /** @internal 

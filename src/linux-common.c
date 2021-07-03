@@ -118,6 +118,8 @@ decode_vendor_string( char *s, int *vendor )
 		*vendor = PAPI_VENDOR_MIPS;
 	else if ( strcasecmp( s, "SiCortex" ) == 0 )
 		*vendor = PAPI_VENDOR_MIPS;
+	else if ( strcasecmp( s, "LOONGARCH64" ) == 0 )
+		*vendor = PAPI_VENDOR_LOONGARCH64;
 	else
 		*vendor = PAPI_VENDOR_UNKNOWN;
 }
