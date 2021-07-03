@@ -243,6 +243,35 @@ static inline void __raw_spin_unlock(volatile unsigned int *lock)
 }
 #define  _papi_hwd_lock(lck) __raw_spin_lock(&_papi_hwd_lock_data[lck]);
 #define  _papi_hwd_unlock(lck) __raw_spin_unlock(&_papi_hwd_lock_data[lck])
+
+#elif defined(__loongarch__)
+static inline void __raw_spin_lock(volatile unsigned int *lock)
+{
+  unsigned int tmp;
+		__asm__ __volatile__(
+		"1:     ll.w      %1, %2                                \n"
+		"       bnez    %1, 1b                                  \n"
+		"        li     %1,  1                                  \n"
+		"       sc.w      %1, %0                                \n"
+		"       beqz   %1, 1b                                   \n"
+		"       dbar 0                                          \n"
+		: "=m" (*lock), "=&r" (tmp)
+		: "m" (*lock)
+		: "memory");
+}
+
+static inline void __raw_spin_unlock(volatile unsigned int *lock)
+{
+	__asm__ __volatile__(
+	"       dbar 0                                            \n"
+	"       st.w      $r0, %0                                 \n"
+	: "=m" (*lock)
+	: "m" (*lock)
+	: "memory");
+}
+#define  _papi_hwd_lock(lck) __raw_spin_lock(&_papi_hwd_lock_data[lck]);
+#define  _papi_hwd_unlock(lck) __raw_spin_unlock(&_papi_hwd_lock_data[lck])
+
 #else
 
 #error "_papi_hwd_lock/unlock undefined!"

@@ -48,6 +48,9 @@
 				: /* no input */                        \
 				: "memory")
 
+#elif defined(__loongarch__)
+#define rmb() asm volatile ("dbar 0" : : : "memory")
+
 #elif defined(__i386__)
 #define rmb() asm volatile("lock; addl $0,0(%%esp)" ::: "memory")
 
